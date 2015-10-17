@@ -1,0 +1,5 @@
+.idea
+*.pyc
+pygp.egg-info
+dist/
+build/
