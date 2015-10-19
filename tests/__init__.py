@@ -33,4 +33,5 @@ class TestPYGP(unittest.TestCase):
     def test_parser_construct_graph(self):
         p = Parser(dataset="../dataset/destfile")
         grp = p.graph
+        print p.topten
         self.assertIsNotNone(grp)

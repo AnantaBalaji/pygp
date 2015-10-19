@@ -144,3 +144,9 @@ class Parser(object):
     def graph(self):
         self.__construct_graph()
         return self.as_graph
+
+    @property
+    def topten(self):
+        graph = six.iteritems(self.as_graph.vertList)
+        items = sorted(graph, key=lambda x: len(list(six.iterkeys(x[1].connectedTo))))
+        return map(lambda x: x[1].id,items[:10])
