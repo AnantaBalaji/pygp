@@ -7,7 +7,7 @@ except:
 
 import six,copy
 import logging
-from collections import Counter, defaultdict
+from .graph import construct_graph
 
 
 log = logging.getLogger(__name__)
@@ -85,9 +85,7 @@ def preprocess_dataset(as_paths):
                 l2.remove(m)
                 break
 
-    # print len(set(list(_generator(l2))))
-
-    return l2
+    return l2, set(list(_generator(l2)))
 
 def map_filter(as_paths):
     """
@@ -106,11 +104,11 @@ def map_filter(as_paths):
     returns:
       valid dataset buffer
     """
-    processed_values = preprocess_dataset(as_paths)
+    processed_values, uniques = preprocess_dataset(as_paths)
     processed_values = list(processed_values)
     buffer = StringIO()
     _generate(processed_values, buffer)
-    return buffer
+    return buffer, uniques, processed_values
 
 
 class Parser(object):
@@ -129,7 +127,8 @@ class Parser(object):
         self.parsed_data = self.data.split("\n")
         self.parsed_data.pop()
         self.as_paths = map(lambda x: x.split(":")[1] or x, self.parsed_data)
-        self.actual_values = Parser.map_filter(self.as_paths)
+        self.actual_values, self.uniques, self.as_paths = Parser.map_filter(self.as_paths)
+        self.as_graph = None
 
     def generate_path(self, destination, filename=None):
         if not filename:
@@ -137,3 +136,11 @@ class Parser(object):
         filename = destination + "/"+filename
         f = open(filename, "w+")
         f.write(self.actual_values.getvalue())
+
+    def __construct_graph(self):
+        self.as_graph = construct_graph(self.uniques, self.as_paths)
+
+    @property
+    def graph(self):
+        self.__construct_graph()
+        return self.as_graph
