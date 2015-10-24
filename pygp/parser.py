@@ -8,6 +8,7 @@ except:
 import six,copy
 import logging
 from .graph import construct_graph
+from .Analysis import Analyser
 
 
 log = logging.getLogger(__name__)
@@ -131,6 +132,10 @@ class Parser(object):
         self.as_graph = None
 
     def generate_path(self, destination, filename=None):
+        """
+        Writes a processed as_graph into a
+        file.
+        """
         if not filename:
             filename = "destset"
         filename = destination + "/"+filename
@@ -138,15 +143,31 @@ class Parser(object):
         f.write(self.actual_values.getvalue())
 
     def __construct_graph(self):
+        """constructs the as graph"""
         self.as_graph = construct_graph(self.uniques, self.as_paths)
 
     @property
     def graph(self):
+        """
+        Construct as_graph with as_paths.
+        """
         self.__construct_graph()
         return self.as_graph
 
     @property
     def topten(self):
+        """
+        Computes the top 10 nodes in the unprocessed graph
+        with highest degrees.
+        """
         graph = six.iteritems(self.as_graph.vertList)
         items = sorted(graph, key=lambda x: len(list(six.iterkeys(x[1].connectedTo))))
         return map(lambda x: x[1].id,items[:10])
+
+    def compute_degrees_and_neighbors(self):
+        """
+          Computes the degree and neighbours of
+          each nodes in AS GRAPH thought
+          gao algorithm.
+        """
+        return Analyser.compute_degrees(self.as_graph, self.as_paths)

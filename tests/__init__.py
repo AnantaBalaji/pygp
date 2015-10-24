@@ -2,6 +2,8 @@ import unittest
 
 from pygp.parser import Parser, _generator
 from pygp.graph import construct_graph, Graph
+from pygp.Analysis import Analyser
+
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -35,3 +37,14 @@ class TestPYGP(unittest.TestCase):
         grp = p.graph
         print p.topten
         self.assertIsNotNone(grp)
+
+    def test_compute_distances(self):
+
+        uniques = [1, 2, 3, 4]
+        as_paths = [[2, 3, 1], [4, 1], [3, 4, 2], [23, 56], [80]]
+        G = construct_graph(uniques, as_paths)
+        neighbor, degrees = Analyser.compute_degrees(G, as_paths)
+        log.info(neighbor)
+        log.info(degrees)
+        self.assertIsNotNone(neighbor)
+

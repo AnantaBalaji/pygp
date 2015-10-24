@@ -16,11 +16,17 @@ class Vertex(object):
     def getConnections(self):
         return self.connectedTo.keys()
 
+    def getNeighbours(self):
+        return set(map(lambda x: x.id, self.getConnections()))
+
     def getId(self):
         return self.id
 
     def getWeight(self, nbr):
         return self.connectedTo[nbr]
+
+    def __iter__(self):
+        return iter(self.getConnections())
 
 
 class Graph(object):
@@ -43,7 +49,7 @@ class Graph(object):
     def __contains__(self,n):
         return n in self.vertList
 
-    def addEdge(self, f, t,cost=0):
+    def addEdge(self, f, t ,cost=0):
         if f not in self.vertList:
             nv = self.addVertex(f)
         if t not in self.vertList:
@@ -55,6 +61,9 @@ class Graph(object):
 
     def __iter__(self):
         return iter(self.vertList.values())
+
+    def get(self, key):
+        return self.vertList.get(key)
 
 def map_paths(graph, as_path):
 
