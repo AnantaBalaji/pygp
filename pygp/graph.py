@@ -46,10 +46,10 @@ class Graph(object):
         else:
             return None
 
-    def __contains__(self,n):
+    def __contains__(self, n):
         return n in self.vertList
 
-    def addEdge(self, f, t ,cost=0):
+    def addEdge(self, f, t, cost=0):
         if f not in self.vertList:
             nv = self.addVertex(f)
         if t not in self.vertList:

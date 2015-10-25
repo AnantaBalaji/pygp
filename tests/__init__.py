@@ -29,6 +29,7 @@ class TestPYGP(unittest.TestCase):
         uniques = [1, 2, 3, 4]
         as_paths = [[2, 3, 1], [4, 1, 3], [3, 4, 2]]
         G = construct_graph(uniques, as_paths)
+        log.info(G)
         v = G.getVertex(1)
         self.assertIsNotNone(v)
 
@@ -47,4 +48,29 @@ class TestPYGP(unittest.TestCase):
         log.info(neighbor)
         log.info(degrees)
         self.assertIsNotNone(neighbor)
+
+    def test_compute_transits(self):
+        uniques = [1, 2, 3, 4]
+        as_paths = [[2, 3, 5], [1, 4], [5, 4], [5, 2]]
+        G = construct_graph(uniques, as_paths)
+        neighbor, degrees = Analyser.compute_degrees(G, as_paths)
+        log.info(neighbor)
+        log.info(degrees)
+        transits = Analyser.compute_transit_path(degrees, as_paths)
+        log.info(transits)
+        edges = Analyser.assign_relationship(transits, as_paths)
+        log.info(edges)
+        self.assertIsNotNone(neighbor)
+
+    def test_dataset(self):
+        p = Parser(dataset="../dataset/destfile")
+        graph = p.graph
+        neighbors, degrees = Analyser.compute_degrees(graph, p.as_paths)
+        log.info(neighbors)
+        log.info(degrees)
+        transits = Analyser.compute_transit_path(degrees, p.as_paths)
+        log.info(transits)
+        edges = Analyser.assign_relationship(transits, p.as_paths)
+        log.info(edges)
+
 
