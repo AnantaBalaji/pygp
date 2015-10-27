@@ -7,8 +7,11 @@ def find_nodes(degrees, paths):
       nodes of the given path.
     """
     path_degrees = map(lambda x: degrees[x], paths)
+
     min_val = min(path_degrees, key=lambda x: x)
+
     max_val = max(path_degrees, key=lambda x: x)
+
     j_min = filter(lambda x: degrees.get(x, 0) == min_val, paths)[0]
     j_max = filter(lambda x: degrees.get(x, 0) == max_val, paths)[0]
     j_min, j_max = paths.index(j_min), paths.index(j_max)
@@ -43,8 +46,8 @@ class Analyser(object):
                     break
                 v1 = graph.get(key)
                 v2 = graph.get(path[index+1])
-                neighbors[key] = v1.getNeighbours() | v2.getNeighbours()
-                neighbors[path[index+1]] = v2.getNeighbours() | v1.getNeighbours()
+                neighbors[key] = v1.getNeighbours() | set([path[index+1]])
+                neighbors[path[index+1]] = v2.getNeighbours() | set([key])
 
         for key in neighbors:
             degree[key] = len(neighbors[key])

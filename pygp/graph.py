@@ -77,6 +77,8 @@ def map_paths(graph, as_path):
 def construct_graph(uniques, as_paths):
 
     G = Graph()
+    print uniques
+    print as_paths
 
     for key in uniques:
         G.addVertex(key=key)

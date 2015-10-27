@@ -19,6 +19,7 @@ class TestPYGP(unittest.TestCase):
           Map filter from the Parse class
         """
         p = Parser(dataset="../dataset/testset")
+        log.info(p.as_paths)
         self.assertIsNotNone(p.actual_values)
 
     def test_generates(self):
@@ -34,8 +35,9 @@ class TestPYGP(unittest.TestCase):
         self.assertIsNotNone(v)
 
     def test_parser_construct_graph(self):
-        p = Parser(dataset="../dataset/destfile")
+        p = Parser(dataset="../dataset/testset")
         grp = p.graph
+        print grp.getVertex(32786)
         print p.topten
         self.assertIsNotNone(grp)
 
@@ -63,13 +65,10 @@ class TestPYGP(unittest.TestCase):
         self.assertIsNotNone(neighbor)
 
     def test_dataset(self):
-        p = Parser(dataset="../dataset/destfile")
+        p = Parser(dataset="../dataset/testset")
         graph = p.graph
         neighbors, degrees = Analyser.compute_degrees(graph, p.as_paths)
-        log.info(neighbors)
-        log.info(degrees)
         transits = Analyser.compute_transit_path(degrees, p.as_paths)
-        log.info(transits)
         edges = Analyser.assign_relationship(transits, p.as_paths)
         log.info(edges)
 
